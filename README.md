@@ -1,4 +1,4 @@
-# pizza-express
+# Pizza Planet
 
 ## Project setup
 ```
