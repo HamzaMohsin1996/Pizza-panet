@@ -1,24 +1,49 @@
-<template>
+<script setup>
+import { ref } from 'vue';
+import useBasket from '../composibles/usebasket.js';
+const allPizzas = ref([
+{
+        name:'Margherita',
+        description: 'A delicious tomato based pizza toped with mozzeralla',
+        options: [
+            {size: 9, price: 6.95},
+            {size: 12, price: 12.95},
+        ]
+    },
+    {
+        name:'Pepperoni ',
+        description: ' A delicious tomato based pizza toped with mozzeralla & Pepperoni',
+        options: [
+            {size: 9, price: 9.95},
+            {size: 12, price: 13.95},
+        ]
+    }
+]);
 
+const {basket,addToBasket,increaseQuantity,decreaseQuantity,total} = useBasket();
+
+</script>
+
+<template>
     <div class="menu_wrapper">
         <div class="menu">
             <h3> ~ Authentic handmade pizza  ~ </h3>
             <table>
-                <tbody>
+                <tbody v-for="(pizza,index) in allPizzas" :key="index">
                     <tr>
-                        <td> Margarita</td>
+                        <td> {{ pizza.name }}</td>
                     </tr>
                     <tr>
                         <td> 
                             <small>
-                                A delicious tomato-based pizza topped with mozzeralla.
+                               {{ pizza.description }}
                             </small>
                         </td>
                     </tr>
-                    <tr>
-                        <td> 9“</td>
-                        <td> $7.95</td>
-                        <td> <button type="button">&#43;</button></td>
+                    <tr v-for="(option, index) in pizza.options" :key="option[index]">
+                        <td> {{ option.size }}“</td>
+                        <td> ${{ option.price }}</td>
+                        <td> <button type="button" @click="addToBasket(pizza, option)">&#43;</button></td>
 
                     </tr>
                 </tbody>
@@ -27,21 +52,21 @@
         <div class="basket">
             <h3> ~ Basket  ~ </h3>
             <table>
-                <tbody>
+                <tbody v-for="(item, index) in basket " :key="index">
                     <tr>
                         <td>
-                            <button class="quantity_button" type="button">&#8722;</button>
-                            <span>1</span>
-                            <button class="quantity_button" type="button">&#43;</button>
+                            <button @click="decreaseQuantity(item)" class="quantity_button" type="button">&#8722;</button>
+                            <span>{{item.quantity}}</span>
+                            <button @click="increaseQuantity(item)" class="quantity_button" type="button" >&#43;</button>
                         </td>
                         <td>
-                            Margarita
+                            {{item.name}} {{item.size}}
                         </td>
-                        <td> $7.95</td>
+                        <td> ${{item.price * item.quantity}}</td>
                     </tr>
                 </tbody>
             </table>
-            <p>Order Total:$87 </p>
+            <p>Order Total:${{ total }} </p>
             <button type="button">Place Order</button>
         </div>
     </div>
