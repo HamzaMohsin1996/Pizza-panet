@@ -18,6 +18,7 @@ import AppHeader  from './components/AppHeader.vue';
     display: flex;
     align-items: center;
     flex-direction: column;
+    background: #faf1e2;
   }
   @media (min-width: 900px){
     .info_text_wrapper{
